@@ -1,6 +1,17 @@
-import useCollapseDrawer from "../../hooks/useCollapseDrawer";
-import { AppBar, Toolbar } from "@material-ui/core";
+import { Icon } from "@iconify/react";
+import menu2Fill from "@iconify/icons-eva/menu-2-fill";
+
+import { AppBar, Box, IconButton, Stack, Toolbar } from "@material-ui/core";
 import { alpha, styled } from "@material-ui/core/styles";
+
+import useCollapseDrawer from "../../hooks/useCollapseDrawer";
+
+import { MHidden } from "../../components/@material-extend";
+
+import Searchbar from "./Searchbar";
+import LanguagePopover from "./LanguagePopover";
+import NotificationsPopover from "./NotificationPopover";
+import AccountPopover from "./AccountPopover";
 
 const DRAWER_WIDTH = 280;
 const COLLAPSE_WIDTH = 102;
@@ -26,9 +37,41 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-
-export default function DashboardNavbar({ onOpenSideBar }) {
+export default function DashboardNavbar({ onOpenSidebar }) {
   const { isCollapse } = useCollapseDrawer();
 
-  return;
+  return (
+    <RootStyle
+      sx={{
+        ...(isCollapse && {
+          width: { lg: `calc(100% - ${COLLAPSE_WIDTH}px)` },
+        }),
+      }}
+    >
+      <ToolbarStyle>
+        <MHidden width="lgUp">
+          <IconButton
+            onClick={onOpenSidebar}
+            sx={{ mr: 1, color: "text.primary" }}
+          >
+            <Icon icon={menu2Fill} />
+          </IconButton>
+        </MHidden>
+
+        <Searchbar />
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={{ xs: 0.5, sm: 1.5 }}
+        >
+          <LanguagePopover />
+          <NotificationsPopover />
+          {/* ContactsPopover ? */}
+          <AccountPopover />
+        </Stack>
+      </ToolbarStyle>
+    </RootStyle>
+  );
 }
