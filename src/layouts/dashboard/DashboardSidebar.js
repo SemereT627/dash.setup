@@ -166,6 +166,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </Stack>
 
       <NavSection navConfig={sidebarConfig} isShow={!isCollapse} />
+      
+      <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );
 

@@ -68,8 +68,6 @@ const MOCK_NOTIFICATIONS = [...Array(5)].map((_, index) => ({
   isUnRead: UNREADS[index],
 }));
 
-// ----------------------------------------------------------------------
-
 function renderContent(notification) {
   const title = (
     <Typography variant="subtitle2">

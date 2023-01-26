@@ -20,7 +20,7 @@ const App = () => {
             <RtlLayout>
               <NotistackProvider>
                 <Settings />
-                {/* <ScrollToTop /> */}
+                <ScrollToTop />
                 {/* condition */}
                 <Router />
                 {/* <LoadingScreen /> */}
