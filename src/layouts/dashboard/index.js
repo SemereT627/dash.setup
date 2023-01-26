@@ -1,6 +1,9 @@
 import { useState } from "react";
 import useCollapseDrawer from "../../hooks/useCollapseDrawer";
 import { styled, useTheme } from "@material-ui/styles";
+import DashboardNavbar from "./DashboardNavbar";
+import { Outlet } from "react-router-dom";
+import DashboardSidebar from "./DashboardSidebar";
 
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
@@ -29,5 +32,25 @@ export default function DashboardLayout() {
   const { collapseClick } = useCollapseDrawer();
   const [open, setOpen] = useState(false);
 
-  return <RootStyle></RootStyle>;
+  return (
+    <RootStyle>
+      <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+      <DashboardSidebar
+        isOpenSidebar={open}
+        onCloseSidebar={() => setOpen(false)}
+      />
+      <MainStyle
+        sx={{
+          transition: theme.transitions.create("margin", {
+            duration: theme.transitions.duration.complex,
+          }),
+          ...(collapseClick && {
+            ml: "102px",
+          }),
+        }}
+      >
+        <Outlet />
+      </MainStyle>
+    </RootStyle>
+  );
 }
