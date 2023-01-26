@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import { enUS } from "@material-ui/core/locale";
+import { enUS, deDE, frFR } from "@material-ui/core/locale";
 
 const LANGS = [
   {
@@ -8,6 +8,19 @@ const LANGS = [
     value: "en",
     systemValue: enUS,
     icon: "/static/icons/ic_flag_en.svg",
+  },
+  {
+    label: "German",
+    value: "de",
+    systemValue: deDE,
+
+    icon: "/static/icons/ic_flag_de.svg",
+  },
+  {
+    label: "French",
+    value: "fr",
+    systemValue: frFR,
+    icon: "/static/icons/ic_flag_fr.svg",
   },
 ];
 

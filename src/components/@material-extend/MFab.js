@@ -44,3 +44,5 @@ const MFab = forwardRef(
     );
   }
 );
+
+export default MFab;
