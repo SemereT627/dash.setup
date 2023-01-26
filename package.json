@@ -23,6 +23,7 @@
     "date-fns": "^2.29.3",
     "framer-motion": "^8.5.3",
     "i18next": "20.4.0",
+    "i18next-browser-languagedetector": "6.1.2",
     "lodash": "^4.17.21",
     "notistack5": "1.0.1",
     "nprogress": "^0.2.0",

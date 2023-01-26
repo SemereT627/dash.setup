@@ -13,7 +13,6 @@ const LANGS = [
     label: "German",
     value: "de",
     systemValue: deDE,
-
     icon: "/static/icons/ic_flag_de.svg",
   },
   {
