@@ -17,9 +17,9 @@ import Scrollbar from "../Scrollbar";
 import { MIconButton } from "../@material-extend";
 import SettingMode from "./SettingMode";
 import SettingColor from "./SettingColor";
-import SettingStretch from "./SettingStretch";
-import SettingDirection from "./SettingDirection";
-import SettingFullscreen from "./SettingFullscreen";
+// import SettingStretch from "./SettingStretch";
+// import SettingDirection from "./SettingDirection";
+// import SettingFullscreen from "./SettingFullscreen";
 
 const DRAWER_WIDTH = 260;
 
@@ -125,22 +125,22 @@ export default function Settings() {
                 <SettingMode />
               </Stack>
 
-              <Stack spacing={1.5}>
+              {/* <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Direction</Typography>
                 <SettingDirection />
-              </Stack>
+              </Stack> */}
 
               <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Color</Typography>
                 <SettingColor />
               </Stack>
 
-              <Stack spacing={1.5}>
+              {/* <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Stretch</Typography>
                 <SettingStretch />
-              </Stack>
+              </Stack> */}
 
-              <SettingFullscreen />
+              {/* <SettingFullscreen /> */}
             </Stack>
           </Scrollbar>
         </Paper>
