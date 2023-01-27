@@ -4,7 +4,6 @@ import Router from "./routes";
 import ThemeConfig from "./theme";
 
 import Settings from "./components/settings";
-import RtlLayout from "./components/RtlLayout";
 import ScrollToTop from "./components/ScrollToTop";
 import LoadingScreen from "./components/LoadingScreen";
 import NotistackProvider from "./components/NotistackProvider";
@@ -17,15 +16,13 @@ const App = () => {
       <ThemeConfig>
         <ThemePrimaryColor>
           <ThemeLocalization>
-            <RtlLayout>
-              <NotistackProvider>
-                <Settings />
-                <ScrollToTop />
-                {/* condition */}
-                <Router />
-                {/* <LoadingScreen /> */}
-              </NotistackProvider>
-            </RtlLayout>
+            <NotistackProvider>
+              <Settings />
+              <ScrollToTop />
+              {/* condition */}
+              <Router />
+              {/* <LoadingScreen /> */}
+            </NotistackProvider>
           </ThemeLocalization>
         </ThemePrimaryColor>
       </ThemeConfig>
