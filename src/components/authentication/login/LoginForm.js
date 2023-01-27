@@ -50,7 +50,6 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        console.log(values);
         // await login(values.email, values.password);
         enqueueSnackbar("Login success", {
           variant: "success",
