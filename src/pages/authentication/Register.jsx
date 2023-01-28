@@ -47,7 +47,7 @@ const ContentStyle = styled("div")(({ theme }) => ({
 
 export default function Register() {
   return (
-    <RootStyle title="Register | Minimal-UI">
+    <RootStyle title="Register | Fitness Gym Admin">
       <AuthLayout>
         Already have an account? &nbsp;
         <Link
@@ -86,8 +86,6 @@ export default function Register() {
             </Tooltip>
           </Box>
 
-          {/* {method === "firebase" && <AuthFirebaseSocials />} */}
-
           <RegisterForm />
 
           <Typography
@@ -95,7 +93,7 @@ export default function Register() {
             align="center"
             sx={{ color: "text.secondary", mt: 3 }}
           >
-            By registering, I agree to Minimal&nbsp;
+            By registering, I agree to Eshi Fitness Gym Admin&nbsp;
             <Link underline="always" color="text.primary" href="#">
               Terms of Service
             </Link>

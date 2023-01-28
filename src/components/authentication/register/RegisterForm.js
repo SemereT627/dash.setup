@@ -13,6 +13,10 @@ import {
   IconButton,
   InputAdornment,
   Alert,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@material-ui/core";
 import { LoadingButton } from "@material-ui/lab";
 
@@ -33,6 +37,19 @@ export default function RegisterForm() {
     email: Yup.string()
       .email("Email must be a valid email address")
       .required("Email is required"),
+    phoneNumber: Yup.string()
+      .matches(
+        /(0\s*9\s*(([0-9]\s*){8}))|(0\s*7\s*(([0-9]\s*){8}))/,
+        "Phone number must be a valid phone number"
+      )
+      .length(10, "Phone number must be 10 digits")
+      .required("Phone number is required"),
+
+    gymName: Yup.string()
+      .min(2, "Too Short!")
+      .max(50, "Too Long!")
+      .required("Gym name is required"),
+
     password: Yup.string().required("Password is required"),
   });
 
@@ -40,6 +57,9 @@ export default function RegisterForm() {
     initialValues: {
       fullName: "",
       email: "",
+      phoneNumber: "",
+      gender: "",
+      gymName: "",
       password: "",
     },
     validationSchema: RegisterSchema,
@@ -82,23 +102,13 @@ export default function RegisterForm() {
             <Alert severity="error">{errors.afterSubmit}</Alert>
           )}
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-            <TextField
-              fullWidth
-              label="Full name"
-              {...getFieldProps("fullName")}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-            />
-
-            <TextField
-              fullWidth
-              label="Phone number"
-              {...getFieldProps("phoneNumber")}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-            />
-          </Stack>
+          <TextField
+            fullWidth
+            label="Full name"
+            {...getFieldProps("fullName")}
+            error={Boolean(touched.fullName && errors.fullName)}
+            helperText={touched.fullName && errors.fullName}
+          />
 
           <TextField
             fullWidth
@@ -108,6 +118,43 @@ export default function RegisterForm() {
             {...getFieldProps("email")}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
+          />
+
+          <TextField
+            fullWidth
+            label="Phone number"
+            {...getFieldProps("phoneNumber")}
+            error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+            helperText={touched.phoneNumber && errors.phoneNumber}
+          />
+
+          <Stack
+            direction={{ xs: "row" }}
+            style={{ alignItems: "center" }}
+            spacing={2}
+          >
+            <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="female"
+              name="radio-buttons-group"
+              style={{ display: "flex", flexDirection: "row" }}
+            >
+              <FormControlLabel
+                value="female"
+                control={<Radio />}
+                label="Female"
+              />
+              <FormControlLabel value="male" control={<Radio />} label="Male" />
+            </RadioGroup>
+          </Stack>
+
+          <TextField
+            fullWidth
+            label="Gym name"
+            {...getFieldProps("gymName")}
+            error={Boolean(touched.gymName && errors.gymName)}
+            helperText={touched.gymName && errors.gymName}
           />
 
           <TextField
