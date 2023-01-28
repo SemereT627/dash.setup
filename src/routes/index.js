@@ -1,9 +1,8 @@
 import { useRoutes } from "react-router-dom";
 
-import { Login } from "../pages/authentication/Login";
-import { Register } from "../pages/authentication/Register";
-
 import DashboardLayout from "../layouts/dashboard";
+import Login from "../pages/authentication/Login";
+import Register from "../pages/authentication/Register";
 
 export default function Router() {
   return useRoutes([
@@ -20,7 +19,7 @@ export default function Router() {
         },
       ],
     },
-    
+
     //   Dashboard Routes
     {
       path: "dashboard",

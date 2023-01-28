@@ -48,7 +48,7 @@ const ContentStyle = styled("div")(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-export const Login = () => {
+export default function Login() {
   return (
     <RootStyle title="Login | Fitness Gym Admin">
       <AuthLayout haveLogo={false}>
@@ -81,7 +81,7 @@ export const Login = () => {
               </Typography>
             </Box>
 
-            <Tooltip title={"Fitness Icon"}>
+            <Tooltip title={"Fitness icon"}>
               <Box
                 component="img"
                 src={`/static/logo.png`}
@@ -126,4 +126,4 @@ export const Login = () => {
       </Container>
     </RootStyle>
   );
-};
+}
