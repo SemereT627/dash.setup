@@ -40,7 +40,7 @@ export default function ResetPassword() {
     <RootStyle title="Reset Password | Fitness Gym Admin">
       <MHidden width="mdDown">
         <SectionStyle>
-          <img src="/static/avatar/forgot-password.png" alt="login" />
+          <img src="/static/avatar/forgot-password.png" alt="reset-password" />
         </SectionStyle>
       </MHidden>
 

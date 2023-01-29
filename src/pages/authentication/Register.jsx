@@ -1,4 +1,3 @@
-import { capitalCase } from "change-case";
 import { Link as RouterLink } from "react-router-dom";
 
 import { styled } from "@material-ui/core/styles";
@@ -63,7 +62,7 @@ export default function Register() {
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <img alt="register" src="/static/avatar/signup.png" />
+          <img src="/static/avatar/signup.png" alt="register" />
         </SectionStyle>
       </MHidden>
 

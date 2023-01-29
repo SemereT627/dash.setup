@@ -1,23 +1,17 @@
 import React from "react";
-import { capitalCase } from "change-case";
 import { Link as RouterLink } from "react-router-dom";
 
 import { styled } from "@material-ui/core/styles";
 import {
   Box,
   Card,
-  Stack,
   Link,
-  Alert,
-  Tooltip,
   Container,
   Typography,
   Button,
 } from "@material-ui/core";
 
 import { PATH_AUTH } from "../../routes/paths";
-
-import AuthLayout from "../../layouts/AuthLayout";
 
 import Page from "../../components/Page";
 import { MHidden } from "../../components/@material-extend";
@@ -57,7 +51,7 @@ export default function VerifyPhone() {
     <RootStyle title="Verify Phone | Fitness Gym Admin">
       <MHidden width="mdDown">
         <SectionStyle>
-          <img src="/static/avatar/verify-phone.png" alt="login" />
+          <img src="/static/avatar/verify-phone.png" alt="verify-phone" />
         </SectionStyle>
       </MHidden>
 

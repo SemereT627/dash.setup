@@ -1,5 +1,4 @@
 import React from "react";
-import { capitalCase } from "change-case";
 import { Link as RouterLink } from "react-router-dom";
 
 import { styled } from "@material-ui/core/styles";
@@ -8,20 +7,15 @@ import {
   Card,
   Stack,
   Link,
-  Alert,
   Tooltip,
   Container,
   Typography,
-  Button,
 } from "@material-ui/core";
 
 import { PATH_AUTH } from "../../routes/paths";
 
-import AuthLayout from "../../layouts/AuthLayout";
-
 import Page from "../../components/Page";
 import { MHidden } from "../../components/@material-extend";
-import { LoginForm } from "../../components/authentication/login";
 
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
@@ -51,21 +45,9 @@ const ContentStyle = styled("div")(({ theme }) => ({
 export default function VerifyEmail() {
   return (
     <RootStyle title="Verify Email | Fitness Gym Admin">
-      <AuthLayout haveLogo={false}>
-        Don’t have an account? &nbsp;
-        <Link
-          underline="none"
-          variant="subtitle2"
-          component={RouterLink}
-          to={PATH_AUTH.register}
-        >
-          Get started
-        </Link>
-      </AuthLayout>
-
       <MHidden width="mdDown">
         <SectionStyle>
-          <img src="/static/avatar/login.png" alt="login" />
+          <img src="/static/avatar/verify-email.png" alt="verify-email" />
         </SectionStyle>
       </MHidden>
 
@@ -74,10 +56,10 @@ export default function VerifyEmail() {
           <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h4" gutterBottom>
-                Eshi Fitness Login
+                Eshi Fitness Verify Email
               </Typography>
               <Typography sx={{ color: "text.secondary" }}>
-                Login into your account.
+                Verifying your email, please be patient.
               </Typography>
             </Box>
 
@@ -89,13 +71,6 @@ export default function VerifyEmail() {
               />
             </Tooltip>
           </Stack>
-
-          {/* <Alert severity="info" sx={{ mb: 3 }}>
-            Use email : <strong>demo@minimals.cc</strong> / password :
-            <strong>&nbsp;demo1234</strong>
-          </Alert> */}
-
-          <LoginForm />
 
           <MHidden width="smUp">
             <Typography variant="body2" align="center" sx={{ mt: 3 }}>
