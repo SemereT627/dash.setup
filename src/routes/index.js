@@ -1,10 +1,35 @@
-import { Navigate, useRoutes } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { Navigate, useLocation, useRoutes } from "react-router-dom";
 
 import DashboardLayout from "../layouts/dashboard";
-import Login from "../pages/authentication/Login";
-import Register from "../pages/authentication/Register";
-import GeneralApp from "../pages/dashboard/GeneralApp";
-import ResetPassword from "../pages/authentication/ResetPassword";
+
+import LoadingScreen from "../components/LoadingScreen";
+
+const Loadable = (Component) => (props) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { pathname } = useLocation();
+  const isDashboard = pathname.includes("/dashboard");
+
+  return (
+    <Suspense
+      fallback={
+        <LoadingScreen
+          sx={{
+            ...(!isDashboard && {
+              top: 0,
+              left: 0,
+              width: 1,
+              zIndex: 9999,
+              position: "fixed",
+            }),
+          }}
+        />
+      }
+    >
+      <Component {...props} />
+    </Suspense>
+  );
+};
 
 export default function Router() {
   return useRoutes([
@@ -22,6 +47,14 @@ export default function Router() {
         {
           path: "reset-password",
           element: <ResetPassword />,
+        },
+        {
+          path: "verify-email",
+          element: <VerifyEmail />,
+        },
+        {
+          path: "verify-phone",
+          element: <VerifyPhone />,
         },
       ],
     },
@@ -54,3 +87,25 @@ export default function Router() {
     },
   ]);
 }
+
+// IMPORTING COMPONENTS
+
+// Authentication
+const Login = Loadable(lazy(() => import("../pages/authentication/Login")));
+const Register = Loadable(
+  lazy(() => import("../pages/authentication/Register"))
+);
+const ResetPassword = Loadable(
+  lazy(() => import("../pages/authentication/ResetPassword"))
+);
+const VerifyEmail = Loadable(
+  lazy(() => import("../pages/authentication/VerifyEmail"))
+);
+const VerifyPhone = Loadable(
+  lazy(() => import("../pages/authentication/VerifyPhone"))
+);
+
+//Dashboard
+const GeneralApp = Loadable(
+  lazy(() => import("../pages/dashboard/GeneralApp"))
+);
