@@ -83,6 +83,19 @@ export default function Router() {
           element: <Navigate to="/dashboard/app" replace />,
         },
         { path: "app", element: <GeneralApp /> },
+        {
+          path: "user",
+          children: [
+            {
+              path: "/dashboard/user",
+              element: <Navigate to="/dashboard/user/profile" replace />,
+            },
+            {
+              path: "/dashboard/user/profile",
+              element: <UserProfile />,
+            },
+          ],
+        },
       ],
     },
 
@@ -118,4 +131,8 @@ const VerifyPhone = Loadable(
 //Dashboard
 const GeneralApp = Loadable(
   lazy(() => import("../pages/dashboard/GeneralApp"))
+);
+
+const UserProfile = Loadable(
+  lazy(() => import("../pages/dashboard/UserProfile"))
 );
