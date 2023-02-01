@@ -4,7 +4,9 @@ import { useSelector } from "react-redux";
 
 export default function MyAvatar({ ...other }) {
   const { user } = useSelector((state) => state.auth);
-  console.log(`${process.env.REACT_APP_IMG_URL}/users/${user.picture}`);
+
+  console.log(user);
+
   return (
     <MAvatar
       src={`${process.env.REACT_APP_API_URL}/users/${user.picture}}`}

@@ -5,6 +5,7 @@ import DashboardLayout from "../layouts/dashboard";
 
 import LoadingScreen from "../components/LoadingScreen";
 import GuestGuard from "../guards/GuestGuard";
+import AuthGuard from "../guards/AuthGuard";
 
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -72,9 +73,9 @@ export default function Router() {
     {
       path: "dashboard",
       element: (
-        <>
+        <AuthGuard>
           <DashboardLayout />
-        </>
+        </AuthGuard>
       ),
       children: [
         {

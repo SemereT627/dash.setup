@@ -23,6 +23,7 @@
     "axios": "^1.2.6",
     "change-case": "^4.1.2",
     "date-fns": "^2.29.3",
+    "firebase": "^9.16.0",
     "formik": "2.2.9",
     "framer-motion": "^8.5.3",
     "i18next": "20.4.0",

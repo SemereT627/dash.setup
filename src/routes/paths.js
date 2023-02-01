@@ -12,7 +12,7 @@ export const PATH_AUTH = {
   register: path(ROOTS_AUTH, "/register"),
   registerUnprotected: path(ROOTS_AUTH, "/register-unprotected"),
   resetPassword: path(ROOTS_AUTH, "/reset-password"),
-  verify: path(ROOTS_AUTH, "/verify"),
+  verifyPhone: path(ROOTS_AUTH, "/verify-phone"),
 };
 
 export const PATH_PAGE = {
@@ -86,4 +86,10 @@ export const PATH_DASHBOARD = {
   },
 };
 
-export const PATH_DOCS = "https://docs-minimals.vercel.app/introduction";
+// Server paths
+
+export const SERVER_PATH = {
+  login: "/auth/login",
+  register: "/gymAdmins/gymAdminRegister",
+  verifyPhone: "/auth/verifyFirebaseSmsOtp",
+};
