@@ -5,6 +5,9 @@ const INITIAL_STATE = {
   loginLoading: false,
   loginSuccess: false,
   loginError: null,
+
+  user: {},
+  token: null,
 };
 
 export const loginAsync = createAsyncThunk(
@@ -34,25 +37,25 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginAsync.pending, (state) => {
-      state.loginLoading = true;
-      state.loginSuccess = false;
-    });
-    builder.addCase(loginAsync.fulfilled, (state, action) => {
-      state.loginLoading = false;
-      state.loginSuccess = true;
+    builder
+      .addCase(loginAsync.pending, (state) => {
+        state.loginLoading = true;
+        state.loginSuccess = false;
+      })
+      .addCase(loginAsync.fulfilled, (state, action) => {
+        state.loginLoading = false;
+        state.loginSuccess = true;
 
-      state.addressProfileCompleted =
-        action.payload.data.gym.addressProfileCompleted;
-      state.photoProfileCompleted =
-        action.payload.data.gym.photoProfileCompleted;
-      state.planProfileCompleted = action.payload.data.gym.planProfileCompleted;
-
-      state.gymId = action.payload.data.gym.id;
-      state.user = action.payload.data.user;
-      state.token = action.payload.data.token["accessToken"];
-      state.firstGymVerified = action.payload.data.user.firstGymVerified;
-    });
+        state.user = action.payload.data.user;
+        state.token = action.payload.data.token["accessToken"];
+      })
+      .addCase(loginAsync.rejected, (state, action) => {
+        state.loginLoading = false;
+        state.loginSuccess = false;
+        state.loginError = !action.payload.response
+          ? action.payload.message
+          : action.payload.response.data.message;
+      });
   },
 });
 

@@ -23,6 +23,7 @@ import NavSection from "../../components/NavSection";
 import { MHidden } from "../../components/@material-extend";
 
 import sidebarConfig from "./SidebarConfig";
+import { useSelector } from "react-redux";
 
 const DRAWER_WIDTH = 280;
 const COLLAPSE_WIDTH = 102;
@@ -94,6 +95,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     onHoverLeave,
   } = useCollapseDrawer();
 
+  const { user } = useSelector((state) => state.auth);
+
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar();
@@ -154,10 +157,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                  {/* {user?.displayName} */} Abebe
+                  {user?.fullName}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {/* {user?.role} */} admin
+                  {user?.role}
                 </Typography>
               </Box>
             </AccountStyle>
@@ -166,7 +169,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </Stack>
 
       <NavSection navConfig={sidebarConfig} isShow={!isCollapse} />
-      
+
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );

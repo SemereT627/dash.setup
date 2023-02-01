@@ -4,6 +4,7 @@ import { Navigate, useLocation, useRoutes } from "react-router-dom";
 import DashboardLayout from "../layouts/dashboard";
 
 import LoadingScreen from "../components/LoadingScreen";
+import GuestGuard from "../guards/GuestGuard";
 
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -38,11 +39,19 @@ export default function Router() {
       children: [
         {
           path: "login",
-          element: <Login />,
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          ),
         },
         {
           path: "register",
-          element: <Register />,
+          element: (
+            <GuestGuard>
+              <Register />
+            </GuestGuard>
+          ),
         },
         {
           path: "reset-password",

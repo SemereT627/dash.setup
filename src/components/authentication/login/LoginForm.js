@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack5";
 
 import { Link as RouterLink } from "react-router-dom";
@@ -28,37 +28,33 @@ import { PATH_AUTH } from "../../../routes/paths";
 import useIsMountedRef from "../../../hooks/useIsMountedRef";
 
 import { MIconButton } from "../../@material-extend";
+import { useDispatch, useSelector } from "react-redux";
+import { clearLogin, loginAsync } from "../../../store/auth/authSlice";
 
 export default function LoginForm() {
+  const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
+    phoneEmail: Yup.string().required("Phone number/Email address is required"),
     password: Yup.string().required("Password is required"),
   });
 
+  const { loginLoading, loginSuccess, loginError } = useSelector(
+    (state) => state.auth
+  );
+
   const formik = useFormik({
     initialValues: {
-      email: "",
+      phoneEmail: "",
       password: "",
-      remember: true,
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        // await login(values.email, values.password);
-        enqueueSnackbar("Login success", {
-          variant: "success",
-          action: (key) => (
-            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-              <Icon icon={closeFill} />
-            </MIconButton>
-          ),
-        });
+        dispatch(loginAsync(values));
         if (isMountedRef.current) {
           setSubmitting(false);
         }
@@ -73,8 +69,7 @@ export default function LoginForm() {
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-    formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -84,18 +79,20 @@ export default function LoginForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          {errors.afterSubmit && (
-            <Alert severity="error">{errors.afterSubmit}</Alert>
+          {loginError && (
+            <Alert onClose={() => dispatch(clearLogin())} severity="error">
+              {loginError}
+            </Alert>
           )}
 
           <TextField
             fullWidth
             autoComplete="username"
             type="email"
-            label="Email address"
-            {...getFieldProps("email")}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            label="Phone number/Email address"
+            {...getFieldProps("phoneEmail")}
+            error={Boolean(touched.phoneEmail && errors.phoneEmail)}
+            helperText={touched.phoneEmail && errors.phoneEmail}
           />
 
           <TextField
@@ -121,19 +118,9 @@ export default function LoginForm() {
         <Stack
           direction="row"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="end"
           sx={{ my: 2 }}
         >
-          <FormControlLabel
-            control={
-              <Checkbox
-                {...getFieldProps("remember")}
-                checked={values.remember}
-              />
-            }
-            label="Remember me"
-          />
-
           <Link
             component={RouterLink}
             variant="subtitle2"
@@ -148,7 +135,7 @@ export default function LoginForm() {
           size="large"
           type="submit"
           variant="contained"
-          loading={isSubmitting}
+          loading={loginLoading}
         >
           Login
         </LoadingButton>

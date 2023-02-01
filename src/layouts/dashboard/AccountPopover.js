@@ -13,13 +13,15 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { alpha } from "@material-ui/core/styles";
 import { Button, Box, Divider, MenuItem, Typography } from "@material-ui/core";
 
-import { PATH_DASHBOARD } from "../../routes/paths";
+import { PATH_AUTH, PATH_DASHBOARD } from "../../routes/paths";
 
 import useIsMountedRef from "../../hooks/useIsMountedRef";
 
 import { MIconButton } from "../../components/@material-extend";
 import MyAvatar from "../../components/MyAvatar";
 import MenuPopover from "../../components/MenuPopover";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../store/auth/authSlice";
 
 const MENU_OPTIONS = [
   {
@@ -40,12 +42,15 @@ const MENU_OPTIONS = [
 ];
 
 export default function AccountPopover() {
+  const dispatch = useDispatch();
   const anchorRef = useRef(null);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const isMountedRef = useIsMountedRef();
 
   const [open, setOpen] = useState(false);
+
+  const { user } = useSelector((state) => state.auth);
 
   const handleOpen = () => {
     setOpen(true);
@@ -56,8 +61,8 @@ export default function AccountPopover() {
 
   const handleLogout = async () => {
     try {
-      // await logout();
-      navigate("/");
+      dispatch(logOut());
+      navigate(PATH_AUTH.login, { replace: true });
       if (isMountedRef.current) {
         handleClose();
       }
@@ -100,10 +105,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {/* {user.displayName} */}Abebe
+            {user.fullName.split(" ")[0]}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {/* {user.email} */}Kebede
+            {user.fullName.split(" ")[1]}
           </Typography>
         </Box>
 
