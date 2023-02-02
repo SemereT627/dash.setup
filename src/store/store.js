@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 
 import authSlice from "./auth/authSlice";
+import gymSlice from "./gym/gymSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -14,6 +15,7 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authSlice);
 
 const rootReducer = combineReducers({
   auth: persistedAuthReducer,
+  gym: gymSlice,
 });
 
 export const store = configureStore({

@@ -16,6 +16,13 @@ const INITIAL_STATE = {
   phoneNumberVerificationError: null,
   phoneNumberVerificationToken: null,
 
+  addressProfileCompleted: false,
+  photoProfileCompleted: false,
+  serviceProfileCompleted: false,
+
+  firstGymVerified: false,
+  gymId: null,
+
   user: {},
   token: null,
 };
@@ -87,6 +94,17 @@ const authSlice = createSlice({
       state.phoneNumberVerificationSuccess = false;
       state.phoneNumberVerificationError = action.payload;
     },
+
+    changeGymState: (state, action) => {
+      if (action.payload.state === "addressProfileCompleted") {
+        state.addressProfileCompleted = true;
+      } else if (action.payload.state === "photoProfileCompleted") {
+        state.photoProfileCompleted = true;
+      } else if (action.payload.state === "serviceProfileCompleted") {
+        state.serviceProfileCompleted = true;
+        state.firstGymVerified = true;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -97,8 +115,17 @@ const authSlice = createSlice({
         state.loginLoading = false;
         state.loginSuccess = true;
 
+        state.addressProfileCompleted =
+          action.payload.data.gym.addressProfileCompleted;
+        state.photoProfileCompleted =
+          action.payload.data.gym.photoProfileCompleted;
+        state.serviceProfileCompleted =
+          action.payload.data.gym.planProfileCompleted;
+
         state.user = action.payload.data.user;
         state.token = action.payload.data.token["accessToken"];
+        state.firstGymVerified = action.payload.data.user.firstGymVerified;
+        state.gymId = action.payload.data.gym.id;
       })
       .addCase(loginAsync.rejected, (state, action) => {
         state.loginLoading = false;
@@ -131,5 +158,6 @@ export const {
   verifyPhoneNumberStart,
   verifyPhoneNumberSuccess,
   verifyPhoneNumberError,
+  changeGymState,
 } = authSlice.actions;
 export default authSlice.reducer;

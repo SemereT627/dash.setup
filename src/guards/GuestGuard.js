@@ -3,11 +3,11 @@ import { PATH_DASHBOARD, PATH_GYM } from "../routes/paths";
 import { useSelector } from "react-redux";
 
 export default function GuestGuard({ children }) {
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, firstGymVerified } = useSelector((state) => state.auth);
 
-  console.log(user?.firstGymVerified, token);
+  console.log(token, firstGymVerified);
 
-  if (!user?.firstGymVerified && token) {
+  if (!firstGymVerified && token) {
     return <Navigate to={PATH_GYM.createGym} />;
   }
 
