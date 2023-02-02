@@ -17,6 +17,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Input,
 } from "@material-ui/core";
 import { LoadingButton } from "@material-ui/lab";
 
@@ -27,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearRegister, registerAsync } from "../../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { PATH_AUTH } from "../../routes/paths";
+import { usePlacesWidget } from "react-google-autocomplete";
 
 export default function CreateGymForm() {
   const dispatch = useDispatch();
@@ -35,6 +37,15 @@ export default function CreateGymForm() {
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
+
+  const { ref } = usePlacesWidget({
+    apiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
+    onPlaceSelected: (place) => console.log(place),
+    options: {
+      types: ["(cities)"],
+      componentRestrictions: { country: "et" },
+    },
+  });
 
   const RegisterSchema = Yup.object().shape({
     city: Yup.string()
@@ -112,6 +123,15 @@ export default function CreateGymForm() {
               fullWidth
               label="Woreda"
               {...getFieldProps("woreda")}
+              error={Boolean(touched.woreda && errors.woreda)}
+              helperText={touched.woreda && errors.woreda}
+            />
+
+            <input ref={ref} />
+
+            <TextField
+              fullWidth
+              label="Address"
               error={Boolean(touched.woreda && errors.woreda)}
               helperText={touched.woreda && errors.woreda}
             />
