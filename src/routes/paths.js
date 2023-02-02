@@ -4,6 +4,7 @@ function path(root, sublink) {
 
 const ROOTS_AUTH = "/auth";
 const ROOTS_DASHBOARD = "/dashboard";
+const ROOTS_GYM = "/gym";
 
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
@@ -13,6 +14,11 @@ export const PATH_AUTH = {
   registerUnprotected: path(ROOTS_AUTH, "/register-unprotected"),
   resetPassword: path(ROOTS_AUTH, "/reset-password"),
   verifyPhone: path(ROOTS_AUTH, "/verify-phone"),
+};
+
+export const PATH_GYM = {
+  root: ROOTS_GYM,
+  createGym: path(ROOTS_GYM, "/create-gym"),
 };
 
 export const PATH_PAGE = {

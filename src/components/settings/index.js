@@ -17,7 +17,7 @@ import Scrollbar from "../Scrollbar";
 import { MIconButton } from "../@material-extend";
 import SettingMode from "./SettingMode";
 import SettingColor from "./SettingColor";
-// import SettingStretch from "./SettingStretch";
+import SettingStretch from "./SettingStretch";
 // import SettingDirection from "./SettingDirection";
 // import SettingFullscreen from "./SettingFullscreen";
 
@@ -135,10 +135,10 @@ export default function Settings() {
                 <SettingColor />
               </Stack>
 
-              {/* <Stack spacing={1.5}>
+              <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Stretch</Typography>
                 <SettingStretch />
-              </Stack> */}
+              </Stack>
 
               {/* <SettingFullscreen /> */}
             </Stack>

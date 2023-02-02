@@ -6,6 +6,7 @@ import DashboardLayout from "../layouts/dashboard";
 import LoadingScreen from "../components/LoadingScreen";
 import GuestGuard from "../guards/GuestGuard";
 import AuthGuard from "../guards/AuthGuard";
+import FirstGymGuard from "../guards/FirstGymGuard";
 
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -69,6 +70,20 @@ export default function Router() {
       ],
     },
 
+    {
+      path: "gym",
+      children: [
+        {
+          path: "create-gym",
+          element: (
+            <FirstGymGuard>
+              <CreateGym />
+            </FirstGymGuard>
+          ),
+        },
+      ],
+    },
+
     //   Dashboard Routes
     {
       path: "dashboard",
@@ -127,6 +142,7 @@ const VerifyEmail = Loadable(
 const VerifyPhone = Loadable(
   lazy(() => import("../pages/authentication/VerifyPhone"))
 );
+const CreateGym = Loadable(lazy(() => import("../pages/gym/CreateGym")));
 
 //Dashboard
 const GeneralApp = Loadable(
