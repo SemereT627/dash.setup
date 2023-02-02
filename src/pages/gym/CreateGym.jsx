@@ -50,7 +50,7 @@ export default function GeneralApp() {
 
   const CREATE_GYM_STEPS = [
     "Gym Location and Working Days",
-    "Gym Profile Photo",
+    "Gym Logo and Photos",
     "Gym Services",
   ];
 
@@ -60,7 +60,7 @@ export default function GeneralApp() {
         <SectionStyle>
           <img
             src={`/static/avatar/create-gym-${
-              addressProfileCompleted ? 2 : photoProfileCompleted ? 3 : 1
+              !addressProfileCompleted ? 1 : !photoProfileCompleted ? 2 : 3
             }.png`}
             alt="login"
           />
@@ -82,18 +82,22 @@ export default function GeneralApp() {
                 <Typography sx={{ color: "text.secondary" }}>
                   {
                     CREATE_GYM_STEPS[
-                      addressProfileCompleted
+                      !addressProfileCompleted
+                        ? 0
+                        : !photoProfileCompleted
                         ? 1
-                        : photoProfileCompleted
-                        ? 2
-                        : 0
+                        : 2
                     ]
                   }
                 </Typography>
                 <Typography sx={{ color: "text.primary" }}>
                   Step
                   {` ${
-                    addressProfileCompleted ? 2 : photoProfileCompleted ? 3 : 1
+                    !addressProfileCompleted
+                      ? 1
+                      : !photoProfileCompleted
+                      ? 2
+                      : 3
                   } `}
                   of 3
                 </Typography>

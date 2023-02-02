@@ -1,37 +1,27 @@
 import * as Yup from "yup";
-import { useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
+import { useCallback, useEffect, useState } from "react";
 import { useSnackbar } from "notistack5";
 import { useFormik, Form, FormikProvider } from "formik";
-import eyeFill from "@iconify/icons-eva/eye-fill";
-import closeFill from "@iconify/icons-eva/close-fill";
-import eyeOffFill from "@iconify/icons-eva/eye-off-fill";
 
 import {
   Stack,
   TextField,
-  IconButton,
-  InputAdornment,
   Alert,
-  FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
-  Input,
   Typography,
   Checkbox,
+  Card,
+  CardHeader,
+  CardContent,
 } from "@material-ui/core";
 import { LoadingButton } from "@material-ui/lab";
 
 import useIsMountedRef from "../../hooks/useIsMountedRef";
 
-import { MIconButton } from "../@material-extend";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  changeGymState,
-  clearRegister,
-  registerAsync,
-} from "../../store/auth/authSlice";
+import { changeGymState } from "../../store/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { PATH_AUTH } from "../../routes/paths";
 import { usePlacesWidget } from "react-google-autocomplete";
@@ -43,7 +33,10 @@ import {
   clearCreateSecondGym,
   clearCreateThirdGym,
   createGymFirstStepperAsync,
+  createGymSecondStepperAsync,
 } from "../../store/gym/gymSlice";
+import UploadSingleFile from "../upload/UploadSingleFile";
+import { UploadMultiFile } from "../upload";
 
 export default function CreateGymForm() {
   const dispatch = useDispatch();
@@ -52,6 +45,10 @@ export default function CreateGymForm() {
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
+
+  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
+
   const [location, setLocation] = useState({
     latitude: 0,
     longtiude: 0,
@@ -91,7 +88,7 @@ export default function CreateGymForm() {
     gymCreateThirdStepperError,
   } = useSelector((state) => state.gym);
 
-  const RegisterSchema = Yup.object().shape({
+  const CreateGymSchema = Yup.object().shape({
     city: Yup.string()
       .min(2, "Too Short!")
       .max(50, "Too Long!")
@@ -111,10 +108,6 @@ export default function CreateGymForm() {
       .required("Gym name is required"),
   });
 
-  const { registerLoading, registerSuccess, registerError } = useSelector(
-    (state) => state.auth
-  );
-
   const formik = useFormik({
     initialValues: {
       city: "",
@@ -122,7 +115,7 @@ export default function CreateGymForm() {
       woreda: "",
       latLng: "",
     },
-    validationSchema: RegisterSchema,
+    validationSchema: CreateGymSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         if (isMountedRef.current) {
@@ -142,6 +135,19 @@ export default function CreateGymForm() {
     paddingTop: "50px",
     paddingRight: "10px",
     maxHeight: "27vh",
+    margin: "auto",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    overflowY: "scroll",
+    scrollbarWidth: "thin",
+    scrollbarColor: "#9e9e9e transparent",
+  }));
+
+  const ProfileStyle = styled("div")(({ theme }) => ({
+    paddingTop: "140px",
+    paddingRight: "10px",
+    maxHeight: "50vh",
     margin: "auto",
     display: "flex",
     flexDirection: "column",
@@ -195,6 +201,38 @@ export default function CreateGymForm() {
     },
   });
 
+  const handleDropSingleFile = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (file) {
+      setFile({
+        ...file,
+        preview: URL.createObjectURL(file),
+      });
+    }
+  }, []);
+
+  const handleDropMultiFile = useCallback(
+    (acceptedFiles) => {
+      setFiles(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    },
+    [setFiles]
+  );
+
+  const handleRemoveAll = () => {
+    setFiles([]);
+  };
+
+  const handleRemove = (file) => {
+    const filteredItems = files.filter((_file) => _file !== file);
+    setFiles(filteredItems);
+  };
+
   const handleFormOneSubmit = () => {
     const activeSelectedDays = Object.keys(chooseDate).filter(
       (key) => chooseDate[key] === true
@@ -230,6 +268,25 @@ export default function CreateGymForm() {
       workingDays: totalSelectedDays,
     };
     dispatch(createGymFirstStepperAsync({ gymId, result }));
+  };
+
+  const handleFormTwoSubmit = () => {
+    if (files.length === 0) {
+      alert("Please upload at least one photo");
+      return;
+    }
+    if (file === null) {
+      alert("Please upload a cover photo");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("logo", file);
+    files.map((image) => {
+      formData.append("newPhotos", image);
+    });
+
+    dispatch(createGymSecondStepperAsync({ gymId, result: formData }));
   };
 
   useEffect(() => {
@@ -860,11 +917,34 @@ export default function CreateGymForm() {
                   {gymCreateSecondStepperError}
                 </Alert>
               )}
+
+              <ProfileStyle className="fitness-scrollbar">
+                <Typography variant="h5" gutterBottom>
+                  Gym Logo
+                </Typography>
+                <UploadSingleFile file={file} onDrop={handleDropSingleFile} />
+                <Typography
+                  variant="h5"
+                  sx={{ paddingTop: "15px" }}
+                  gutterBottom
+                >
+                  Gym Photos
+                </Typography>
+                <UploadMultiFile
+                  showPreview={true}
+                  files={files}
+                  onDrop={handleDropMultiFile}
+                  onRemove={handleRemove}
+                  onRemoveAll={handleRemoveAll}
+                />
+              </ProfileStyle>
+
               <LoadingButton
                 fullWidth
                 size="large"
                 type="button"
                 variant="contained"
+                onClick={handleFormTwoSubmit}
                 loading={gymCreateSecondStepperLoading}
               >
                 Next
