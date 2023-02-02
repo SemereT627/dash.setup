@@ -37,27 +37,21 @@ export default function CreateGymForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    fullName: Yup.string()
+    city: Yup.string()
       .min(2, "Too Short!")
       .max(50, "Too Long!")
-      .required("Full name required"),
-    email: Yup.string()
+      .required("City is required"),
+    subcity: Yup.string()
       .email("Email must be a valid email address")
-      .required("Email is required"),
-    phone: Yup.string()
-      .matches(
-        /(0\s*9\s*(([0-9]\s*){8}))|(0\s*7\s*(([0-9]\s*){8}))/,
-        "Phone number must be a valid phone number"
-      )
-      .length(10, "Phone number must be 10 digits")
-      .required("Phone number is required"),
-
-    gymName: Yup.string()
+      .required("Subcity is required"),
+    woreda: Yup.number()
+      .min(1, "Too Short!")
+      .max(2, "Too Long!")
+      .required("Woreda is required"),
+    latLng: Yup.string()
       .min(2, "Too Short!")
       .max(50, "Too Long!")
       .required("Gym name is required"),
-
-    password: Yup.string().required("Password is required"),
   });
 
   const { registerLoading, registerSuccess, registerError } = useSelector(
@@ -66,25 +60,14 @@ export default function CreateGymForm() {
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      gender: "F",
-      gymName: "",
-      password: "",
+      city: "",
+      subcity: "",
+      woreda: "",
+      latLng: "",
     },
     validationSchema: RegisterSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        dispatch(registerAsync({ ...values, phone: values.phone.slice(1) }));
-        // enqueueSnackbar("Register success", {
-        //   variant: "success",
-        //   action: (key) => (
-        //     <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-        //       <Icon icon={closeFill} />
-        //     </MIconButton>
-        //   ),
-        // });
         if (isMountedRef.current) {
           setSubmitting(false);
         }
@@ -106,95 +89,32 @@ export default function CreateGymForm() {
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Stack spacing={3}>
-            {registerError && (
-              <Alert onClose={() => dispatch(clearRegister())} severity="error">
-                {registerError}
-              </Alert>
-            )}
+            {registerError && <Alert severity="error">{registerError}</Alert>}
 
             <TextField
               fullWidth
-              label="Full name"
-              {...getFieldProps("fullName")}
-              error={Boolean(touched.fullName && errors.fullName)}
-              helperText={touched.fullName && errors.fullName}
+              label="City"
+              {...getFieldProps("city")}
+              error={Boolean(touched.city && errors.city)}
+              helperText={touched.city && errors.city}
             />
 
             <TextField
               fullWidth
               autoComplete="username"
-              type="email"
-              label="Email address"
-              {...getFieldProps("email")}
-              error={Boolean(touched.email && errors.email)}
-              helperText={touched.email && errors.email}
+              label="Subcity"
+              {...getFieldProps("subcity")}
+              error={Boolean(touched.subcity && errors.subcity)}
+              helperText={touched.subcity && errors.subcity}
             />
 
             <TextField
               fullWidth
-              label="Phone number"
-              {...getFieldProps("phone")}
-              error={Boolean(touched.phone && errors.phone)}
-              helperText={touched.phone && errors.phone}
+              label="Woreda"
+              {...getFieldProps("woreda")}
+              error={Boolean(touched.woreda && errors.woreda)}
+              helperText={touched.woreda && errors.woreda}
             />
-
-            <Stack
-              direction={{ xs: "row" }}
-              style={{ alignItems: "center" }}
-              spacing={2}
-            >
-              <TextField
-                fullWidth
-                label="Gym name"
-                {...getFieldProps("gymName")}
-                error={Boolean(touched.gymName && errors.gymName)}
-                helperText={touched.gymName && errors.gymName}
-              />
-
-              <TextField
-                fullWidth
-                autoComplete="current-password"
-                type={showPassword ? "text" : "password"}
-                label="Password"
-                {...getFieldProps("password")}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        edge="end"
-                        onClick={() => setShowPassword((prev) => !prev)}
-                      >
-                        <Icon icon={showPassword ? eyeFill : eyeOffFill} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                error={Boolean(touched.password && errors.password)}
-                helperText={touched.password && errors.password}
-              />
-            </Stack>
-
-            <Stack
-              direction={{ xs: "row" }}
-              style={{ alignItems: "center" }}
-              spacing={2}
-            >
-              <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="F"
-                name="radio-buttons-group"
-                style={{ display: "flex", flexDirection: "row" }}
-                {...getFieldProps("gender")}
-              >
-                <FormControlLabel
-                  value="F"
-                  control={<Radio />}
-                  label="Female"
-                />
-                <FormControlLabel value="M" control={<Radio />} label="Male" />
-              </RadioGroup>
-            </Stack>
 
             <LoadingButton
               fullWidth
@@ -203,7 +123,7 @@ export default function CreateGymForm() {
               variant="contained"
               loading={registerLoading}
             >
-              Register
+              Next
             </LoadingButton>
           </Stack>
         </Form>
