@@ -15,19 +15,17 @@ import {
   Link,
   Stack,
   Alert,
-  Checkbox,
   TextField,
   IconButton,
   InputAdornment,
-  FormControlLabel,
 } from "@material-ui/core";
 import { LoadingButton } from "@material-ui/lab";
 
 import { PATH_AUTH } from "../../../routes/paths";
 
 import useIsMountedRef from "../../../hooks/useIsMountedRef";
-
 import { MIconButton } from "../../@material-extend";
+
 import { useDispatch, useSelector } from "react-redux";
 import { clearLogin, loginAsync } from "../../../store/auth/authSlice";
 
