@@ -1,13 +1,12 @@
 import { Helmet } from "react-helmet-async";
-import { useLocation } from "react-router-dom";
-import { forwardRef, useEffect, useCallback } from "react";
+import { forwardRef } from "react";
 
 import { Box } from "@material-ui/core";
 
-import track from "../utils/analytics";
+// import track from "../utils/analytics";
 
 const Page = forwardRef(({ children, title = "", ...other }, ref) => {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
 
   //   const sendPageViewEvent = useCallback(() => {
   //     track.pageview({

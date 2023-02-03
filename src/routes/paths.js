@@ -106,4 +106,7 @@ export const SERVER_PATH = {
     `/gyms/completeGymProfile/${gymId}/uploadImages`,
   createGymThirdStepper: (gymId) =>
     `/gyms/completeServiceProfile/${gymId}/serviceCreate`,
+
+  // Service
+  service: "/services",
 };

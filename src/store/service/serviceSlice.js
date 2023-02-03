@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../utils/axios";
+import { SERVER_PATH } from "../../routes/paths";
 
 const INITIAL_STATE = {
   fetchGymServicesLoading: false,
@@ -21,7 +22,7 @@ export const fetchGymServicesAsync = createAsyncThunk(
       const {
         auth: { token },
       } = getState();
-      const response = await api.get(`/services`, {
+      const response = await api.get(SERVER_PATH.service, {
         params: {
           status: data.status,
         },
@@ -41,7 +42,7 @@ export const createRequestServiceAsync = createAsyncThunk(
       const {
         auth: { token },
       } = getState();
-      const response = await api.post(`/services`, data, {
+      const response = await api.post(SERVER_PATH.service, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
