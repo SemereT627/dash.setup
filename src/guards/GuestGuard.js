@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 export default function GuestGuard({ children }) {
   const { token, firstGymVerified } = useSelector((state) => state.auth);
 
-  console.log(token, firstGymVerified);
-
   if (!firstGymVerified && token) {
     return <Navigate to={PATH_GYM.createGym} />;
   }

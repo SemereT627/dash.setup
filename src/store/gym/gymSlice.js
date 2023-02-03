@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../utils/axios";
+import { SERVER_PATH } from "../../routes/paths";
 
 const INITIAL_STATE = {
   gymCreateFirstStepperLoading: false,
@@ -26,7 +27,7 @@ export const createGymFirstStepperAsync = createAsyncThunk(
         auth: { token },
       } = getState();
       const response = await api.patch(
-        `${process.env.REACT_APP_API_URL}/gyms/completeGymProfile/${data.gymId}/addressAndWorkingHours`,
+        SERVER_PATH.createGymFirstStepper(data.gymId),
         data.result,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -45,7 +46,7 @@ export const createGymSecondStepperAsync = createAsyncThunk(
         auth: { token },
       } = getState();
       const response = await api.patch(
-        `${process.env.REACT_APP_API_URL}/gyms/completeGymProfile/${data.gymId}/uploadImages`,
+        SERVER_PATH.createGymSecondStepper(data.gymId),
         data.result,
         {
           headers: {
@@ -69,7 +70,7 @@ export const createGymThirdStepperAsync = createAsyncThunk(
         auth: { token },
       } = getState();
       const response = await api.patch(
-        `${process.env.REACT_APP_API_URL}/gyms/completeServiceProfile/${data.gymId}/serviceCreate`,
+        SERVER_PATH.createGymThirdStepper(data.gymId),
         data.result,
         {
           headers: {

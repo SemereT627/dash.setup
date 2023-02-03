@@ -16,6 +16,10 @@ const INITIAL_STATE = {
   phoneNumberVerificationError: null,
   phoneNumberVerificationToken: null,
 
+  emailVerificationLoading: false,
+  emailVerificationSuccess: false,
+  emailVerificationError: null,
+
   addressProfileCompleted: false,
   photoProfileCompleted: false,
   serviceProfileCompleted: false,
@@ -56,6 +60,18 @@ export const verifyPhoneNumberAsync = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await api.post(SERVER_PATH.verifyPhone, data);
+      return response;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  }
+);
+
+export const verifyEmailAsync = createAsyncThunk(
+  "auth/verifyEmailAsync",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/auth/verifyEmail", data);
       return response;
     } catch (err) {
       return rejectWithValue(err);
@@ -128,6 +144,7 @@ const authSlice = createSlice({
         state.gymId = action.payload.data.gym.id;
       })
       .addCase(loginAsync.rejected, (state, action) => {
+        console.log(action.payload);
         state.loginLoading = false;
         state.loginSuccess = false;
         state.loginError = !action.payload.response
@@ -147,6 +164,18 @@ const authSlice = createSlice({
         state.registerLoading = false;
         state.registerSuccess = false;
         state.registerError = action.payload.response.data.message;
+      })
+      .addCase(verifyEmailAsync.pending, (state) => {
+        state.emailVerificationLoading = true;
+      })
+      .addCase(verifyEmailAsync.fulfilled, (state, action) => {
+        state.emailVerificationLoading = false;
+        state.emailVerificationSuccess = true;
+      })
+      .addCase(verifyEmailAsync.rejected, (state, action) => {
+        state.emailVerificationLoading = false;
+        state.emailVerificationSuccess = false;
+        state.emailVerificationError = action.payload.response.data.message;
       });
   },
 });

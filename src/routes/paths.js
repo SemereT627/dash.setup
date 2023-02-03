@@ -98,4 +98,12 @@ export const SERVER_PATH = {
   login: "/auth/login",
   register: "/gymAdmins/gymAdminRegister",
   verifyPhone: "/auth/verifyFirebaseSmsOtp",
+
+  // Gym
+  createGymFirstStepper: (gymId) =>
+    `/gyms/completeGymProfile/${gymId}/addressAndWorkingHours`,
+  createGymSecondStepper: (gymId) =>
+    `/gyms/completeGymProfile/${gymId}/uploadImages`,
+  createGymThirdStepper: (gymId) =>
+    `/gyms/completeServiceProfile/${gymId}/serviceCreate`,
 };

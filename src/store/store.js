@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 
 import authSlice from "./auth/authSlice";
 import gymSlice from "./gym/gymSlice";
+import serviceSlice from "./service/serviceSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -16,6 +17,7 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authSlice);
 const rootReducer = combineReducers({
   auth: persistedAuthReducer,
   gym: gymSlice,
+  service: serviceSlice,
 });
 
 export const store = configureStore({

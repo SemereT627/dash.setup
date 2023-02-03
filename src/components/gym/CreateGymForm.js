@@ -15,6 +15,10 @@ import {
   Card,
   CardHeader,
   CardContent,
+  InputAdornment,
+  Grid,
+  CardMedia,
+  Button,
 } from "@material-ui/core";
 import { LoadingButton } from "@material-ui/lab";
 
@@ -37,6 +41,11 @@ import {
 } from "../../store/gym/gymSlice";
 import UploadSingleFile from "../upload/UploadSingleFile";
 import { UploadMultiFile } from "../upload";
+import { fetchGymServicesAsync } from "../../store/service/serviceSlice";
+import { CustomModal } from "../modal";
+import LoadingScreen from "../LoadingScreen";
+import { LoadingComponent } from "../loader";
+import { RequestServiceForm } from "./service";
 
 export default function CreateGymForm() {
   const dispatch = useDispatch();
@@ -44,7 +53,6 @@ export default function CreateGymForm() {
 
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [showPassword, setShowPassword] = useState(false);
 
   const [file, setFile] = useState(null);
   const [files, setFiles] = useState([]);
@@ -53,6 +61,9 @@ export default function CreateGymForm() {
     latitude: 0,
     longtiude: 0,
   });
+
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [showRequestServiceModal, setShowRequestServiceModal] = useState(false);
 
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
@@ -87,6 +98,13 @@ export default function CreateGymForm() {
     gymCreateThirdStepperSuccess,
     gymCreateThirdStepperError,
   } = useSelector((state) => state.gym);
+
+  const {
+    fetchGymServicesLoading,
+    fetchGymServicesSuccess,
+    fetchGymServicesError,
+    services,
+  } = useSelector((state) => state.service);
 
   const CreateGymSchema = Yup.object().shape({
     city: Yup.string()
@@ -233,6 +251,17 @@ export default function CreateGymForm() {
     setFiles(filteredItems);
   };
 
+  const handleServiceClick = (service) => {
+    if (selectedServices.includes(service)) {
+      const filteredItems = selectedServices.filter(
+        (_service) => _service !== service
+      );
+      setSelectedServices(filteredItems);
+    } else {
+      setSelectedServices([...selectedServices, service]);
+    }
+  };
+
   const handleFormOneSubmit = () => {
     const activeSelectedDays = Object.keys(chooseDate).filter(
       (key) => chooseDate[key] === true
@@ -290,6 +319,7 @@ export default function CreateGymForm() {
   };
 
   useEffect(() => {
+    dispatch(fetchGymServicesAsync({ status: "A" }));
     if (gymCreateFirstStepperSuccess) {
       dispatch(changeGymState({ state: "addressProfileCompleted" }));
       dispatch(clearCreateFirstGym());
@@ -308,6 +338,8 @@ export default function CreateGymForm() {
     gymCreateSecondStepperSuccess,
     gymCreateThirdStepperSuccess,
   ]);
+
+  console.log(services);
 
   return (
     <>
@@ -960,6 +992,62 @@ export default function CreateGymForm() {
                   {gymCreateThirdStepperError}
                 </Alert>
               )}
+
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                alignItems="center"
+                justifyContent="start"
+                spacing={2}
+              >
+                <Button
+                  sx={{ width: "40%", color: "primary.main" }}
+                  variant="text"
+                  onClick={() => setShowRequestServiceModal(true)}
+                >
+                  Request Service
+                </Button>
+              </Stack>
+
+              {fetchGymServicesLoading ? (
+                <LoadingComponent
+                  visible={fetchGymServicesLoading}
+                  type={"dotted"}
+                />
+              ) : (
+                <Grid container columns={3} gap={2}>
+                  {services.map((service, index) => (
+                    <Card
+                      key={service.id}
+                      sx={{
+                        width: "33%",
+                        border: selectedServices.includes(service.id)
+                          ? "1px solid"
+                          : "none",
+                        borderColor: "primary.main",
+                      }}
+                      onClick={() => handleServiceClick(service.id)}
+                    >
+                      <CardMedia
+                        component={"img"}
+                        title={service.name}
+                        height="120"
+                        image={`${process.env.REACT_APP_IMG_URL}/services/${service.image}`}
+                      />
+                      <CardContent>
+                        <Typography
+                          variant="h5"
+                          sx={{ textJustify: "center" }}
+                          paragraph
+                        >
+                          {service.name}
+                        </Typography>
+                        <Typography>{service.description}</Typography>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </Grid>
+              )}
+
               <LoadingButton
                 fullWidth
                 size="large"
@@ -973,6 +1061,13 @@ export default function CreateGymForm() {
           ) : null}
         </Form>
       </FormikProvider>
+      <CustomModal
+        isOpen={showRequestServiceModal}
+        onClose={() => setShowRequestServiceModal(false)}
+        title="Create Request Service"
+      >
+        <RequestServiceForm />
+      </CustomModal>
       <div id="recaptcha-container"></div>
     </>
   );

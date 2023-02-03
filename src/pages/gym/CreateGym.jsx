@@ -51,7 +51,7 @@ export default function GeneralApp() {
   const CREATE_GYM_STEPS = [
     "Gym Location and Working Days",
     "Gym Logo and Photos",
-    "Gym Services",
+    "Gym Services and Request Service",
   ];
 
   return (

@@ -91,7 +91,7 @@ export default function Register() {
           <Typography
             variant="body2"
             align="center"
-            sx={{ color: "text.secondary", mt: 3 }}
+            sx={{ color: "text.secondary", fontSize: "0.795rem", mt: 3 }}
           >
             By registering, I agree to Eshi Fitness Gym Admin&nbsp;
             <Link underline="always" color="text.primary" href="#">

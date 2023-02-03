@@ -1,5 +1,10 @@
 import { Suspense, lazy } from "react";
-import { Navigate, useLocation, useRoutes } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useRoutes,
+} from "react-router-dom";
 
 import DashboardLayout from "../layouts/dashboard";
 
@@ -35,6 +40,7 @@ const Loadable = (Component) => (props) => {
 };
 
 export default function Router() {
+  const navigate = useNavigate();
   return useRoutes([
     {
       path: "auth",
@@ -59,10 +65,12 @@ export default function Router() {
           path: "reset-password",
           element: <ResetPassword />,
         },
+
         {
           path: "verify-email",
           element: <VerifyEmail />,
         },
+
         {
           path: "verify-phone",
           element: <VerifyPhone />,
