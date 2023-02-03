@@ -7,6 +7,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import GuestGuard from "../guards/GuestGuard";
 import AuthGuard from "../guards/AuthGuard";
 import FirstGymGuard from "../guards/FirstGymGuard";
+import LogoOnlyLayout from "../layouts/LogoOnlyLayout";
 
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -117,14 +118,26 @@ export default function Router() {
       ],
     },
 
-    // REDIRECT TO 404 IF THE PATH DOES NOT EXIST
+    // MAIN ROUTES
     {
       path: "*",
-      element: <>Everything</>,
+      element: <LogoOnlyLayout />,
+      children: [
+        {
+          path: "404",
+          element: <NotFound />,
+        },
+        { path: "*", element: <Navigate to="/404" replace /> },
+      ],
     },
     {
       path: "/",
-      element: <>ABCD</>,
+      element: <Navigate to="/dashboard/app" replace />,
+    },
+
+    {
+      path: "*",
+      element: <Navigate to="/404" replace />,
     },
   ]);
 }
@@ -151,6 +164,9 @@ const CreateGym = Loadable(lazy(() => import("../pages/gym/CreateGym")));
 const GeneralApp = Loadable(
   lazy(() => import("../pages/dashboard/GeneralApp"))
 );
+
+// MAIN
+const NotFound = Loadable(lazy(() => import("../pages/Page404")));
 
 const UserProfile = Loadable(
   lazy(() => import("../pages/dashboard/UserProfile"))

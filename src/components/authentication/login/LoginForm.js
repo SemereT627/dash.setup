@@ -1,14 +1,10 @@
 import * as Yup from "yup";
 
-import { useEffect, useState } from "react";
-import { useSnackbar } from "notistack5";
-
 import { Link as RouterLink } from "react-router-dom";
 
 import { useFormik, Form, FormikProvider } from "formik";
 import { Icon } from "@iconify/react";
 import eyeFill from "@iconify/icons-eva/eye-fill";
-import closeFill from "@iconify/icons-eva/close-fill";
 import eyeOffFill from "@iconify/icons-eva/eye-off-fill";
 
 import {
@@ -24,15 +20,15 @@ import { LoadingButton } from "@material-ui/lab";
 import { PATH_AUTH } from "../../../routes/paths";
 
 import useIsMountedRef from "../../../hooks/useIsMountedRef";
-import { MIconButton } from "../../@material-extend";
 
 import { useDispatch, useSelector } from "react-redux";
 import { clearLogin, loginAsync } from "../../../store/auth/authSlice";
+import { useState } from "react";
 
 export default function LoginForm() {
   const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -40,9 +36,7 @@ export default function LoginForm() {
     password: Yup.string().required("Password is required"),
   });
 
-  const { loginLoading, loginSuccess, loginError } = useSelector(
-    (state) => state.auth
-  );
+  const { loginLoading, loginError } = useSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
