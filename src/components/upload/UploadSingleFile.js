@@ -29,7 +29,14 @@ const DropZoneStyle = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: { textAlign: "left", flexDirection: "row" },
 }));
 
-export default function UploadSingleFile({ error, file, sx, ...other }) {
+export default function UploadSingleFile({
+  text,
+  description,
+  error,
+  file,
+  sx,
+  ...other
+}) {
   const {
     getRootProps,
     getInputProps,
@@ -89,15 +96,16 @@ export default function UploadSingleFile({ error, file, sx, ...other }) {
       >
         <input {...getInputProps()} />
 
-        <UploadIllustration sx={{ width: 220 }} />
+        <UploadIllustration sx={{ width: 200 }} />
 
         <Box sx={{ p: 3, ml: { md: 2 } }}>
           <Typography gutterBottom variant="h5">
-            Drop or Select image file
+            {text ? text : "Drop or Select image file"}
           </Typography>
 
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Drop image files here or click&nbsp;
+            {description ? description : `Drop image files here or click`}
+            &nbsp;or&nbsp;
             <Typography
               variant="body2"
               component="span"

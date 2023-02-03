@@ -41,6 +41,8 @@ const DropZoneStyle = styled("div")(({ theme }) => ({
 }));
 
 export default function UploadMultiFile({
+  text,
+  description,
   error,
   showPreview = false,
   files,
@@ -208,11 +210,12 @@ export default function UploadMultiFile({
 
           <Box sx={{ p: 3, ml: { md: 2 } }}>
             <Typography gutterBottom variant="h5">
-              Drop or Select file
+              {text ? text : "Drop or Select file"}
             </Typography>
 
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              Drop files here or click&nbsp;
+              {description ? description : "Drop files here or click"}
+              &nbsp;also&nbsp;
               <Typography
                 variant="body2"
                 component="span"
@@ -220,7 +223,7 @@ export default function UploadMultiFile({
               >
                 browse
               </Typography>
-              &nbsp;thorough your machine
+              &nbsp;through your machine
             </Typography>
           </Box>
         </DropZoneStyle>
