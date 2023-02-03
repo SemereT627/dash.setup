@@ -71,7 +71,7 @@ export const verifyEmailAsync = createAsyncThunk(
   "auth/verifyEmailAsync",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await api.post("/auth/verifyEmail", data);
+      const response = await api.post(SERVER_PATH.verifyEmail, data);
       return response;
     } catch (err) {
       return rejectWithValue(err);
@@ -111,6 +111,17 @@ const authSlice = createSlice({
       state.phoneNumberVerificationError = action.payload;
     },
 
+    clearVerifyPhoneNumber: (state) => {
+      state.phoneNumberVerificationLoading = false;
+      state.phoneNumberVerificationSuccess = false;
+      state.phoneNumberVerificationError = null;
+    },
+
+    clearVerifyEmail: (state) => {
+      state.emailVerificationLoading = false;
+      state.emailVerificationSuccess = false;
+      state.emailVerificationError = null;
+    },
     changeGymState: (state, action) => {
       if (action.payload.state === "addressProfileCompleted") {
         state.addressProfileCompleted = true;
@@ -187,6 +198,8 @@ export const {
   verifyPhoneNumberStart,
   verifyPhoneNumberSuccess,
   verifyPhoneNumberError,
+  clearVerifyPhoneNumber,
+  clearVerifyEmail,
   changeGymState,
 } = authSlice.actions;
 export default authSlice.reducer;

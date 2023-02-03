@@ -1,5 +1,9 @@
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
 import { styled } from "@material-ui/core/styles";
 import {
@@ -16,6 +20,9 @@ import { PATH_AUTH } from "../../routes/paths";
 
 import Page from "../../components/Page";
 import { MHidden } from "../../components/@material-extend";
+import { LoadingComponent } from "../../components/loader";
+import { useDispatch, useSelector } from "react-redux";
+import { verifyEmailAsync } from "../../store/auth/authSlice";
 
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
@@ -44,6 +51,30 @@ const ContentStyle = styled("div")(({ theme }) => ({
 }));
 
 export default function VerifyEmail() {
+  const dispatch = useDispatch();
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  const {
+    emailVerificationLoading,
+    emailVerificationSuccess,
+    emailVerificationError,
+  } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (params.get("verificationToken")) {
+      dispatch(
+        verifyEmailAsync({ verificationToken: params.get("verificationToken") })
+      );
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (emailVerificationSuccess) {
+      navigate("/auth/login", { replace: true });
+    }
+  }, [emailVerificationSuccess]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <RootStyle title="Verify Email | Fitness Gym Admin">
       <MHidden width="mdDown">
@@ -63,6 +94,10 @@ export default function VerifyEmail() {
                 Verifying your email, please be patient.
               </Typography>
             </Box>
+            <LoadingComponent
+              visible={emailVerificationLoading}
+              type={"dotted"}
+            />
 
             <Tooltip title={"Fitness icon"}>
               <Box

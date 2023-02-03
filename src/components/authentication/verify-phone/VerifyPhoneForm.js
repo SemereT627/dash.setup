@@ -6,7 +6,7 @@ import { LoadingButton } from "@material-ui/lab";
 
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack5";
-import { PATH_DASHBOARD } from "../../../routes/paths";
+import { PATH_AUTH } from "../../../routes/paths";
 import { useDispatch, useSelector } from "react-redux";
 import {
   verifyPhoneNumberAsync,
@@ -28,7 +28,6 @@ function maxLength(object) {
 export default function VerifyPhoneNumberForm({ onSent, onGetEmail }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
 
   const VerifyCodeSchema = Yup.object().shape({
     code1: Yup.number().required("Code is required"),
@@ -72,8 +71,6 @@ export default function VerifyPhoneNumberForm({ onSent, onGetEmail }) {
     onSubmit: async (values) => {
       const verificationCode = Object.values(values).join("");
       verifyOTP(verificationCode);
-
-      // enqueueSnackbar("Verify success", { variant: "success" });
     },
   });
 
@@ -94,7 +91,7 @@ export default function VerifyPhoneNumberForm({ onSent, onGetEmail }) {
           verificationToken: phoneNumberVerificationToken,
         })
       );
-      navigate(PATH_DASHBOARD.root);
+      navigate(PATH_AUTH.login);
     }
   }, [phoneNumberVerificationSuccess]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -132,7 +129,7 @@ export default function VerifyPhoneNumberForm({ onSent, onGetEmail }) {
           size="large"
           type="submit"
           variant="contained"
-          loading={isSubmitting}
+          loading={phoneNumberVerificationLoading}
           sx={{ mt: 3 }}
         >
           Verify

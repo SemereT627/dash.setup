@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { capitalCase } from "change-case";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -20,8 +20,16 @@ import { PATH_AUTH } from "../../routes/paths";
 import AuthLayout from "../../layouts/AuthLayout";
 
 import Page from "../../components/Page";
-import { MHidden } from "../../components/@material-extend";
+import { MHidden, MIconButton } from "../../components/@material-extend";
 import { LoginForm } from "../../components/authentication/login";
+import { useDispatch, useSelector } from "react-redux";
+import { useSnackbar } from "notistack5";
+import { Icon } from "@iconify/react";
+import closeFill from "@iconify/icons-eva/close-fill";
+import {
+  clearVerifyEmail,
+  clearVerifyPhoneNumber,
+} from "../../store/auth/authSlice";
 
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
@@ -49,6 +57,36 @@ const ContentStyle = styled("div")(({ theme }) => ({
 }));
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { phoneNumberVerificationSuccess, emailVerificationSuccess } =
+    useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (phoneNumberVerificationSuccess) {
+      enqueueSnackbar("Phone number verified successfully", {
+        variant: "success",
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      });
+      dispatch(clearVerifyPhoneNumber());
+    }
+    if (emailVerificationSuccess) {
+      enqueueSnackbar("Email verified successfully", {
+        variant: "success",
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      });
+      dispatch(clearVerifyEmail());
+    }
+  }, [phoneNumberVerificationSuccess, emailVerificationSuccess]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <RootStyle title="Login | Fitness Gym Admin">
       <AuthLayout haveLogo={false}>
