@@ -17,9 +17,10 @@ export default function GeneralApp() {
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { loginSuccess } = useSelector((state) => state.auth);
+  const { gymCreateThirdStepperSuccess } = useSelector((state) => state.gym);
 
   useEffect(() => {
-    if (loginSuccess) {
+    if (loginSuccess && !gymCreateThirdStepperSuccess) {
       enqueueSnackbar("Login success", {
         variant: "success",
         action: (key) => (

@@ -42,9 +42,13 @@ export const createRequestServiceAsync = createAsyncThunk(
       const {
         auth: { token },
       } = getState();
-      const response = await api.post(SERVER_PATH.service, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.post(
+        SERVER_PATH.createService(data.gymId),
+        data.values,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err);

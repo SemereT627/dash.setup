@@ -1,18 +1,13 @@
 import { useSnackbar } from "notistack5";
 
-import useIsMountedRef from "../../hooks/useIsMountedRef";
-
 import { useDispatch, useSelector } from "react-redux";
 import { changeGymState } from "../../store/auth/authSlice";
-import { useNavigate } from "react-router-dom";
 
 import "./style.css";
 import {
   clearCreateFirstGym,
   clearCreateSecondGym,
   clearCreateThirdGym,
-  createGymFirstStepperAsync,
-  createGymSecondStepperAsync,
 } from "../../store/gym/gymSlice";
 
 import { fetchGymServicesAsync } from "../../store/service/serviceSlice";

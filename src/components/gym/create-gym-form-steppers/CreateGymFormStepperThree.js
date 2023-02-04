@@ -9,23 +9,26 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCreateThirdGym } from "../../../store/gym/gymSlice";
+import {
+  clearCreateThirdGym,
+  createGymThirdStepperAsync,
+} from "../../../store/gym/gymSlice";
 import { useState } from "react";
 import { LoadingComponent } from "../../loader";
 import { LoadingButton } from "@material-ui/lab";
 import { CustomModal } from "../../modal";
 import RequestServiceForm from "../service/RequestServiceForm";
 
+import "../style.css";
+
 export default function CreateGymFormStepperThree() {
   const dispatch = useDispatch();
   const [selectedServices, setSelectedServices] = useState([]);
+  const [requestedServices, setRequestedServices] = useState([]);
   const [showRequestServiceModal, setShowRequestServiceModal] = useState(false);
 
-  const {
-    gymCreateThirdStepperLoading,
-
-    gymCreateThirdStepperError,
-  } = useSelector((state) => state.gym);
+  const { gymCreateThirdStepperLoading, gymCreateThirdStepperError } =
+    useSelector((state) => state.gym);
 
   const { gymId } = useSelector((state) => state.auth);
 
@@ -44,6 +47,15 @@ export default function CreateGymFormStepperThree() {
     }
   };
 
+  const handleFormThreeSubmit = () => {
+    if (selectedServices.length === 0) {
+      alert("Please select at least one service");
+    }
+    dispatch(
+      createGymThirdStepperAsync({ gymId, serviceId: selectedServices })
+    );
+  };
+
   return (
     <>
       <Stack spacing={3}>
@@ -59,7 +71,7 @@ export default function CreateGymFormStepperThree() {
         <Stack
           direction={{ xs: "column", sm: "row" }}
           alignItems="center"
-          justifyContent="start"
+          justifyContent="space-between"
           spacing={2}
         >
           <Button
@@ -69,50 +81,96 @@ export default function CreateGymFormStepperThree() {
           >
             Request Service
           </Button>
+
+          <Typography variant="body2" sx={{ textAlign: "center" }}>
+            {`Selected ${selectedServices.length} services`}
+          </Typography>
         </Stack>
 
         {fetchGymServicesLoading ? (
           <LoadingComponent visible={fetchGymServicesLoading} type={"dotted"} />
         ) : (
-          <Grid container columns={3} gap={2}>
-            {services.map((service, index) => (
-              <Card
-                key={service.id}
-                sx={{
-                  width: "33%",
-                  border: selectedServices.includes(service.id)
-                    ? "1px solid"
-                    : "none",
-                  borderColor: "primary.main",
-                }}
-                onClick={() => handleServiceClick(service.id)}
-              >
-                <CardMedia
-                  component={"img"}
-                  title={service.name}
-                  height="120"
-                  image={`${process.env.REACT_APP_IMG_URL}/services/${service.image}`}
-                />
-                <CardContent>
-                  <Typography
-                    variant="h5"
-                    sx={{ textJustify: "center" }}
-                    paragraph
-                  >
-                    {service.name}
-                  </Typography>
-                  <Typography>{service.description}</Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </Grid>
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "nowrap",
+                overflowX: "auto",
+                padding: "10px",
+              }}
+              className="fitness-scrollbar"
+            >
+              {services.map((service, index) => (
+                <Card
+                  key={service.id}
+                  sx={{
+                    flex: "0 0 auto",
+                    display: "inline-block",
+                    marginRight: "10px",
+                    marginBottom: "10px",
+                    border: selectedServices.includes(service.id)
+                      ? "1px solid"
+                      : "none",
+                    borderColor: "primary.main",
+                    width: "180px",
+                  }}
+                  onClick={() => handleServiceClick(service.id)}
+                >
+                  <CardMedia
+                    component={"img"}
+                    title={service.name}
+                    height="140"
+                    image={`${process.env.REACT_APP_IMG_URL}/services/${service.image}`}
+                  />
+                  <CardContent>
+                    <Typography
+                      variant="h5"
+                      sx={{ textJustify: "center" }}
+                      paragraph
+                    >
+                      {service.name}
+                    </Typography>
+                    <Typography>{service.description}</Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div>
+              <Typography variant="h5">Requested Services</Typography>
+
+              <Stack direction="row" spacing={2}>
+                {requestedServices.length > 0
+                  ? requestedServices.map((service, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          margin: "5px",
+                          padding: "5px",
+                          boxShadow: "0px 0px 5px 0px rgba(4,0,0,0.45)",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        <Typography>{service.name}</Typography>
+                        <Typography>{service.description}</Typography>
+                      </div>
+                    ))
+                  : null}
+              </Stack>
+            </div>
+          </>
         )}
 
         <LoadingButton
           fullWidth
           size="large"
-          type="submit"
+          type="button"
           variant="contained"
+          onClick={handleFormThreeSubmit}
           loading={gymCreateThirdStepperLoading}
         >
           Submit
@@ -122,9 +180,12 @@ export default function CreateGymFormStepperThree() {
       <CustomModal
         isOpen={showRequestServiceModal}
         onClose={() => setShowRequestServiceModal(false)}
-        title="Create Request Service"
+        title="New Request Service"
       >
-        <RequestServiceForm />
+        <RequestServiceForm
+          onSuccessRequestService={setRequestedServices}
+          onClose={setShowRequestServiceModal}
+        />
       </CustomModal>
     </>
   );

@@ -69,9 +69,9 @@ export const createGymThirdStepperAsync = createAsyncThunk(
       const {
         auth: { token },
       } = getState();
-      const response = await api.patch(
+      const response = await api.post(
         SERVER_PATH.createGymThirdStepper(data.gymId),
-        data.result,
+        { serviceId: data.serviceId },
         {
           headers: {
             Authorization: `Bearer ${token}`,

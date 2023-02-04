@@ -155,7 +155,6 @@ const authSlice = createSlice({
         state.gymId = action.payload.data.gym.id;
       })
       .addCase(loginAsync.rejected, (state, action) => {
-        console.log(action.payload);
         state.loginLoading = false;
         state.loginSuccess = false;
         state.loginError = !action.payload.response

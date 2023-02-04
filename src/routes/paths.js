@@ -110,4 +110,5 @@ export const SERVER_PATH = {
 
   // Service
   service: "/services",
+  createService: (gymId) => `/gyms/${gymId}/services/request`,
 };
